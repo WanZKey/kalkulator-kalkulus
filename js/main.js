@@ -78,7 +78,7 @@ function initEvaluasiPage() {
     btnHitung.textContent = "Menghitung...";
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/hitung", {
+      const response = await fetch("/api/hitung", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -233,7 +233,7 @@ function initPermodelanPage() {
     const orde = parseInt(document.getElementById("orde-regresi").value);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/regresi", {
+      const response = await fetch("/api/regresi", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ xData: xData, yData: yData, orde: orde }),
@@ -324,7 +324,7 @@ function initKomparasiPage() {
     }
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/komparasi", {
+      const res = await fetch("/api/komparasi", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
