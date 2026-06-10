@@ -1,0 +1,99 @@
+/* General Styles */
+:root {
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+  --danger-color: #ef4444;
+  --danger-hover: #dc2626;
+  --success-color: #16a34a;
+  --warning-color: #eab308;
+  --border-color: #e2e8f0;
+  --text-dark: #1e293b;
+  --text-light: #64748b;
+  --bg-light: #f1f5f9;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Tables */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.data-table thead {
+  background-color: var(--bg-light);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+  padding: 12px;
+  font-weight: 600;
+  text-align: left;
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+.data-table td {
+  padding: 8px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.data-table input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Buttons */
+.btn-delete {
+  color: var(--danger-color);
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s;
+  background: none;
+  border: none;
+  font-size: 20px;
+  padding: 0 8px;
+}
+
+.btn-delete:hover {
+  color: var(--danger-hover);
+}
+
+/* Math Fields */
+math-field {
+  border: none;
+  background: transparent;
+  outline: none;
+}
+
+math-field[read-only] {
+  cursor: default;
+}
+
+/* Dark Code Block */
+.dark-code-block {
+  background-color: #1e1e1e;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.dark-code-block math-field {
+  color: #e0e0e0;
+}
+
+/* Loading State */
+.loading-state {
+  opacity: 0.6;
+  pointer-events: none;
+}

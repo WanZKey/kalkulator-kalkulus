@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Permodelan Data - Kalkulator Integral</title>
+    <script src="https://unpkg.com/mathlive"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body class="bg-slate-100 font-sans min-h-screen pb-10">
+    <!-- Navigation -->
+    <nav
+      class="bg-white shadow-sm border-b border-slate-200 w-full mb-8 sticky top-0 z-50"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <a
+              href="../index.html"
+              class="flex items-center text-slate-500 hover:text-blue-600 font-bold transition"
+            >
+              <svg
+                class="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                ></path>
+              </svg>
+              Kembali
+            </a>
+          </div>
+          <div class="flex items-center space-x-4 md:space-x-8 overflow-x-auto">
+            <a
+              href="../index.html"
+              class="text-slate-500 hover:text-blue-600 border-b-2 border-transparent px-2 py-5 font-medium text-sm transition"
+              >Evaluasi Dasar</a
+            >
+            <a
+              href="permodelan.html"
+              class="text-blue-600 border-b-2 border-blue-600 px-2 py-5 font-bold text-sm"
+              >Permodelan Data</a
+            >
+            <a
+              href="komparasi.html"
+              class="text-slate-500 hover:text-blue-600 border-b-2 border-transparent px-2 py-5 font-medium text-sm transition"
+              >Komparasi</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="w-full max-w-6xl mx-auto px-4">
+      <div class="bg-white rounded-xl shadow-xl p-8">
+        <h1
+          class="text-3xl font-extrabold text-slate-800 mb-8 border-b-2 border-slate-100 pb-4"
+        >
+          Permodelan Data (Curve Fitting)
+        </h1>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <!-- Input Panel -->
+          <div class="space-y-6 h-fit sticky top-24">
+            <div class="bg-slate-50 p-6 rounded-lg border border-slate-200">
+              <h2 class="text-xl font-bold text-slate-700 mb-4">
+                1. Masukkan Data Observasi
+              </h2>
+
+              <div class="space-y-4 mb-6">
+                <div>
+                  <label class="block text-sm font-semibold text-slate-600 mb-1"
+                    >Model Polinomial Regresi</label
+                  >
+                  <select
+                    id="orde-regresi"
+                    class="w-full p-3 border border-slate-300 rounded-md bg-white"
+                  >
+                    <option value="1">Linear (Orde 1)</option>
+                    <option value="2" selected>Kuadratik (Orde 2)</option>
+                    <option value="3">Kubik (Orde 3)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold text-slate-600 mb-1"
+                    >Upload Data (Opsional)</label
+                  >
+                  <input
+                    type="file"
+                    id="file-csv"
+                    accept=".csv"
+                    class="w-full p-2 border border-slate-300 rounded-md bg-white text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  />
+                  <p class="text-xs text-slate-400 mt-1">
+                    Format CSV: kolom pertama (t), kolom kedua (r). Tanpa
+                    header.
+                  </p>
+                </div>
+              </div>
+
+              <div
+                class="border border-slate-300 rounded-md overflow-hidden mb-4"
+              >
+                <table class="data-table">
+                  <thead class="bg-slate-100 border-b border-slate-300">
+                    <tr>
+                      <th class="p-3 font-semibold text-slate-600 text-sm">
+                        Waktu (t)
+                      </th>
+                      <th class="p-3 font-semibold text-slate-600 text-sm">
+                        Laju (r)
+                      </th>
+                      <th
+                        class="p-3 font-semibold text-slate-600 text-sm w-16 text-center"
+                      >
+                        Aksi
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="table-body">
+                    <tr class="border-b border-slate-100 data-row">
+                      <td class="p-2">
+                        <input
+                          type="number"
+                          class="w-full p-2 border border-slate-200 rounded input-t"
+                          value="0"
+                        />
+                      </td>
+                      <td class="p-2">
+                        <input
+                          type="number"
+                          class="w-full p-2 border border-slate-200 rounded input-r"
+                          value="0"
+                        />
+                      </td>
+                      <td class="p-2 text-center">
+                        <button
+                          class="text-red-500 font-bold hover:text-red-700 btn-delete px-2"
+                        >
+                          &times;
+                        </button>
+                      </td>
+                    </tr>
+                    <tr class="border-b border-slate-100 data-row">
+                      <td class="p-2">
+                        <input
+                          type="number"
+                          class="w-full p-2 border border-slate-200 rounded input-t"
+                          value="1"
+                        />
+                      </td>
+                      <td class="p-2">
+                        <input
+                          type="number"
+                          class="w-full p-2 border border-slate-200 rounded input-r"
+                          value="14"
+                        />
+                      </td>
+                      <td class="p-2 text-center">
+                        <button
+                          class="text-red-500 font-bold hover:text-red-700 btn-delete px-2"
+                        >
+                          &times;
+                        </button>
+                      </td>
+                    </tr>
+                    <tr class="border-b border-slate-100 data-row">
+                      <td class="p-2">
+                        <input
+                          type="number"
+                          class="w-full p-2 border border-slate-200 rounded input-t"
+                          value="2"
+                        />
+                      </td>
+                      <td class="p-2">
+                        <input
+                          type="number"
+                          class="w-full p-2 border border-slate-200 rounded input-r"
+                          value="52"
+                        />
+                      </td>
+                      <td class="p-2 text-center">
+                        <button
+                          class="text-red-500 font-bold hover:text-red-700 btn-delete px-2"
+                        >
+                          &times;
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <button
+                id="btn-add-row"
+                class="w-full border-2 border-dashed border-blue-400 text-blue-600 font-bold py-2 px-4 rounded-md hover:bg-blue-50 transition mb-6"
+              >
+                + Tambah Baris Kosong
+              </button>
+
+              <button
+                id="btn-hitung"
+                class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-md hover:bg-blue-700 transition shadow-lg"
+              >
+                Proses Regresi & Hitung Integral
+              </button>
+            </div>
+          </div>
+
+          <!-- Output Panel -->
+          <div class="space-y-6">
+            <div
+              class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm"
+            >
+              <h2 class="text-xl font-bold text-slate-700 mb-4">
+                2. Visualisasi Regresi
+              </h2>
+              <div
+                class="w-full h-64 bg-slate-50 rounded border border-slate-200 flex items-center justify-center"
+              >
+                <canvas id="regression-chart"></canvas>
+              </div>
+              <div
+                class="mt-4 p-4 bg-blue-50 rounded border border-blue-100 text-center"
+              >
+                <p class="text-sm font-semibold text-slate-600 mb-2">
+                  Fungsi Ditemukan:
+                </p>
+                <math-field
+                  id="preview-math"
+                  read-only
+                  style="font-size: 1.25rem"
+                  >f(t) = ?</math-field
+                >
+              </div>
+            </div>
+
+            <!-- Results (Hidden by default) -->
+            <div id="output-wrapper" class="hidden space-y-6">
+              <div class="bg-green-50 p-6 rounded-lg border border-green-200">
+                <h2 class="text-xl font-bold text-slate-700 mb-2">
+                  3. Hasil Akhir (Luas Area Kurva)
+                </h2>
+                <p class="text-slate-600">
+                  Nilai Akumulasi Total:
+                  <span
+                    id="hasil-final-text"
+                    class="text-3xl font-black text-green-700 ml-2"
+                    >...</span
+                  >
+                </p>
+              </div>
+
+              <div
+                class="bg-slate-50 p-8 rounded-lg border border-slate-200 shadow-md"
+              >
+                <h2
+                  class="text-2xl font-black text-slate-800 mb-8 border-b-2 border-slate-200 pb-2"
+                >
+                  Proses Penyelesaian Integral
+                </h2>
+                <div class="space-y-10 text-slate-800">
+                  <!-- Step 1: Integral -->
+                  <div>
+                    <h3 class="font-bold text-xl mb-4">Mencari Integral</h3>
+                    <div class="dark-code-block flex justify-center text-xl">
+                      <math-field id="step1-math" read-only></math-field>
+                    </div>
+                  </div>
+
+                  <!-- Step 2: Substitution -->
+                  <div>
+                    <h3 class="font-bold text-xl mb-4">Substitusi</h3>
+                    <div
+                      class="dark-code-block flex justify-center text-xl mb-6"
+                    >
+                      <math-field id="step-bracket-math" read-only></math-field>
+                    </div>
+                    <div class="ml-4 mb-6">
+                      <h4 class="font-bold text-lg mb-3">
+                        1. Hitung Titik Akhir
+                      </h4>
+                      <div
+                        class="dark-code-block flex flex-col items-center justify-center text-lg space-y-4 w-fit min-w-[250px] mx-auto md:mx-0"
+                      >
+                        <math-field id="step-atas-raw" read-only></math-field>
+                        <math-field id="step-atas-final" read-only></math-field>
+                      </div>
+                    </div>
+                    <div class="ml-4">
+                      <h4 class="font-bold text-lg mb-3">
+                        2. Hitung Titik Awal
+                      </h4>
+                      <div
+                        class="dark-code-block flex flex-col items-center justify-center text-lg space-y-4 w-fit min-w-[250px] mx-auto md:mx-0"
+                      >
+                        <math-field id="step-bawah-raw" read-only></math-field>
+                        <math-field
+                          id="step-bawah-final"
+                          read-only
+                        ></math-field>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Step 3: Final Result -->
+                  <div>
+                    <h3 class="font-bold text-xl mb-4">
+                      3. Jumlah Akumulasi Titik Akhir & Awal
+                    </h3>
+                    <div class="flex flex-col md:flex-row gap-6 items-start">
+                      <div
+                        class="dark-code-block flex flex-col justify-center text-xl space-y-6 w-full md:w-fit min-w-[250px]"
+                      >
+                        <math-field id="step3-selisih" read-only></math-field>
+                        <math-field id="step3-final" read-only></math-field>
+                      </div>
+                      <div class="flex-1 mt-4 md:mt-0 text-lg">
+                        <p id="teks-kesimpulan" class="leading-relaxed"></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+  </body>
+</html>
